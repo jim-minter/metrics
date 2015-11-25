@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: metrics
+
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: metrics
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: metrics:latest
+    source:
+      type: Git
+      git:
+        uri: https://github.com/jim-minter/metrics.git
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: python:2.7
+          namespace: openshift
+    triggers:
+    - type: ImageChange
+
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: metrics
+  spec:
+    replicas: 1
+    selector:
+      name: metrics
+    template:
+      metadata:
+        name: metrics
+        labels:
+          name: metrics
+      spec:
+        containers:
+        - env:
+          - name: MAXMEM
+            value: "100"
+          - name: INTERVAL
+            value: "15"
+          image: metrics
+          name: metrics
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - metrics
+        from:
+          kind: ImageStreamTag
+          name: metrics:latest
+    - type: ConfigChange
