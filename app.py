@@ -22,7 +22,7 @@ def use_mem(pc):
     target = int(100 * pc)
 
     while len(data) < target:
-        data.append("\0" * int(pc * maxmem * 2**20 / 100))
+        data.append("\0" * int(maxmem * 2**20 / 100))
     while len(data) > target:
         data.pop()
 
