@@ -36,7 +36,7 @@ def triangle():
 
 
 maxmem = int(os.environ.get("MAXMEM", "100"))
-interval = int(os.environ.get("INTERVAL", "5"))
+interval = int(os.environ.get("INTERVAL", "15"))
 for p in triangle():
     print >>sys.stderr, "%s: using %0.0f%% CPU and memory" % \
         (time.ctime(), 100 * p)
