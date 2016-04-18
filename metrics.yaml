@@ -27,6 +27,7 @@ items:
           name: python:2.7
           namespace: openshift
     triggers:
+    - type: ConfigChange
     - type: ImageChange
 
 - apiVersion: v1
